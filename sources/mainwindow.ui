@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>655</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Sistema de Controle Logísco Robótico</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>751</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayoutImagem">
+     <item>
+      <widget class="QGraphicsView" name="graphicsView"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>40</y>
+      <width>221</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayoutListaLocais">
+     <item>
+      <widget class="QListView" name="listView"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="labelListaLocais">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>10</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="text">
+     <string>Lista de Locais</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>317</y>
+      <width>221</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayoutListaTarefas">
+     <item>
+      <widget class="QListView" name="listView_2"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="labelListaDeAtividades">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>290</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="text">
+     <string>Lista de Tarefas</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonEnviar">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>560</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>  Enviar ao Robô</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>Images/mail-outgoing.png</normaloff>Images/mail-outgoing.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMapa">
+    <property name="title">
+     <string>Mapa</string>
+    </property>
+    <widget class="QMenu" name="menuAdicionar_Local">
+     <property name="title">
+      <string>Adicionar Local</string>
+     </property>
+     <addaction name="actionComum"/>
+     <addaction name="actionEspecial"/>
+    </widget>
+    <addaction name="actionCarregar"/>
+    <addaction name="menuAdicionar_Local"/>
+    <addaction name="actionRemover_Local"/>
+    <addaction name="actionSalvar_Locais"/>
+    <addaction name="actionCarregar_Locais"/>
+   </widget>
+   <widget class="QMenu" name="menuTarefa">
+    <property name="title">
+     <string>Tarefa</string>
+    </property>
+    <addaction name="actionAdicionar"/>
+    <addaction name="actionRemover"/>
+   </widget>
+   <addaction name="menuMapa"/>
+   <addaction name="menuTarefa"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionCarregar">
+   <property name="text">
+    <string>Carregar</string>
+   </property>
+  </action>
+  <action name="actionRemover_Local">
+   <property name="text">
+    <string>Remover Local</string>
+   </property>
+  </action>
+  <action name="actionAdicionar">
+   <property name="text">
+    <string>Adicionar</string>
+   </property>
+  </action>
+  <action name="actionRemover">
+   <property name="text">
+    <string>Remover</string>
+   </property>
+  </action>
+  <action name="actionComum">
+   <property name="text">
+    <string>Comum</string>
+   </property>
+  </action>
+  <action name="actionEspecial">
+   <property name="text">
+    <string>Especial</string>
+   </property>
+  </action>
+  <action name="actionSalvar_Locais">
+   <property name="text">
+    <string>Salvar Locais</string>
+   </property>
+  </action>
+  <action name="actionCarregar_Locais">
+   <property name="text">
+    <string>Carregar Locais</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

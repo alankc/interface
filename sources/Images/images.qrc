@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>greenFlag.png</file>
+        <file>redFlag.png</file>
+    </qresource>
+</RCC>
