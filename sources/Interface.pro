@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Interface
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -23,7 +24,8 @@ HEADERS  += mainwindow.h \
     controllermainwindow.h \
     modelmainwindow.h \
     myscene.h \
-    modelmap.h
+    modelmap.h \
+    pointfile.h
 
 FORMS    += mainwindow.ui
 

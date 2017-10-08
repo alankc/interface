@@ -1,4 +1,6 @@
 #include "modelmap.h"
+#include "pointfile.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -21,36 +23,38 @@ bool ModelMap::LoadPlacesFromFile(QString p_path)
     if (!in.is_open())
         return false;
 
-    size_t sizeOfCommonList;
+    for (auto& item: this->listOfCommonPlaces)
+        this->listOfCommonPlaces.remove(item);
+
+    for (auto& item: this->listOfSpecialPlaces)
+        this->listOfSpecialPlaces.remove(item);
+
+    size_t sizeOfCommonList, sizeOfSpecialList;
     in.read((char*)&sizeOfCommonList, sizeof(sizeOfCommonList));
-    size_t sizeOfSpecialList;
     in.read((char*)&sizeOfSpecialList, sizeof(sizeOfSpecialList));
 
-    foreach (QPointF* point, this->listOfCommonPlaces)
+    for (uint i = 0; i < sizeOfCommonList; i++)
     {
-        this->listOfCommonPlaces.remove(point);
-        delete(point);
-    }
-    for(uint i = 0; i < sizeOfCommonList; i++)
-    {
-        double x, y;
-        in.read((char*)&x, sizeof(x));
-        in.read((char*)&y, sizeof(y));
-        this->listOfCommonPlaces.push_back(new QPointF(x, y));
+        PointFile pf;
+        in.read((char*)&pf, sizeof(pf));
+
+        std::pair<QString, QPointF*>* pair = new std::pair<QString, QPointF*>();
+        pair->first = QString(pf.name);
+        pair->second = new QPointF(pf.x, pf.y);
+
+        this->listOfCommonPlaces.push_back(pair);
     }
 
-    foreach (QPointF* point, this->listOfSpecialPlaces)
+    for (uint i = 0; i < sizeOfSpecialList; i++)
     {
-        this->listOfSpecialPlaces.remove(point);
-        delete(point);
-    }
+        PointFile pf;
+        in.read((char*)&pf, sizeof(pf));
 
-    for(uint i = 0; i < sizeOfSpecialList; i++)
-    {
-        double x, y;
-        in.read((char*)&x, sizeof(x));
-        in.read((char*)&y, sizeof(y));
-        this->listOfSpecialPlaces.push_back(new QPointF(x, y));
+        std::pair<QString, QPointF*>* pair = new std::pair<QString, QPointF*>();
+        pair->first = QString(pf.name);
+        pair->second = new QPointF(pf.x, pf.y);
+
+        this->listOfSpecialPlaces.push_back(pair);
     }
 
     in.close();
@@ -70,18 +74,33 @@ bool ModelMap::SavePlacesToFile(QString p_path)
     size_t sizeOfSpecialList = this->listOfSpecialPlaces.size();
     out.write((char*)&sizeOfSpecialList, sizeof(sizeOfSpecialList));
 
-    foreach (QPointF* item, listOfCommonPlaces) {
-        double value = item->rx();
-        out.write((char*)&value, sizeof(value));
-        value = item->ry();
-        out.write((char*)&value, sizeof(value));
+    for (auto& item: listOfCommonPlaces)
+    {
+        PointFile pf;
+        const char* name_temp = ((QString)item->first).toStdString().c_str();
+
+        for (uint8_t i = 0; name_temp[i] != '\0' && i < NAME_SIZE - 1; i++)
+            pf.name[i] = name_temp[i];
+
+        pf.x = item->second->rx();
+        pf.y = item->second->ry();
+
+        out.write((char*)&pf, sizeof(PointFile));
     }
 
-    foreach (QPointF* item, listOfSpecialPlaces) {
-        double value = item->rx();
-        out.write((char*)&value, sizeof(value));
-        value = item->ry();
-        out.write((char*)&value, sizeof(value));
+    for (auto& item: listOfSpecialPlaces)
+    {
+        PointFile pf;
+
+        const char* name_temp = ((QString)item->first).toStdString().c_str();
+
+        for (uint8_t i = 0; name_temp[i] != '\0' && i < NAME_SIZE - 1; i++)
+            pf.name[i] = name_temp[i];
+
+        pf.x = item->second->rx();
+        pf.y = item->second->ry();
+
+        out.write((char*)&pf, sizeof(PointFile));
     }
 
     out.close();
@@ -89,17 +108,23 @@ bool ModelMap::SavePlacesToFile(QString p_path)
     return true;
 }
 
-void ModelMap::AddToCommonPlace(QPointF *p_point)
+void ModelMap::AddToCommonPlace(QString p_name, QPointF *p_point)
 {
-    this->listOfCommonPlaces.push_back(p_point);
+    std::pair<QString, QPointF*> *pair = new std::pair<QString, QPointF*>();
+    pair->first = p_name;
+    pair->second = p_point;
+    this->listOfCommonPlaces.push_back(pair);
 }
-
 bool ModelMap::RemoveFromCommonPlace(QPointF *p_point)
 {
-    foreach (QPointF* point, this->listOfCommonPlaces) {
+    for(auto& pair: this->listOfCommonPlaces)
+    {
+
+        QPointF* point = pair->second;
         if ((point->rx() == p_point->rx()) && (point->ry() == p_point->ry()))
         {
-            this->listOfCommonPlaces.remove(point);
+            this->listOfCommonPlaces.remove(pair);
+            delete(pair);
             delete(point);
             return true;
         }
@@ -107,17 +132,23 @@ bool ModelMap::RemoveFromCommonPlace(QPointF *p_point)
     return false;
 }
 
-void ModelMap::AddToSpecialPlace(QPointF *p_point)
+void ModelMap::AddToSpecialPlace(QString p_name, QPointF *p_point)
 {
-    this->listOfSpecialPlaces.push_back(p_point);
+    std::pair<QString, QPointF*> *pair = new std::pair<QString, QPointF*>();
+    pair->first = p_name;
+    pair->second = p_point;
+    this->listOfSpecialPlaces.push_back(pair);
 }
 
 bool ModelMap::RemoveFromSpecialPlace(QPointF *p_point)
 {
-    foreach (QPointF* point, this->listOfSpecialPlaces) {
+    for(auto& pair: this->listOfSpecialPlaces)
+    {
+        QPointF* point = pair->second;
         if ((point->rx() == p_point->rx()) && (point->ry() == p_point->ry()))
         {
-            this->listOfSpecialPlaces.remove(point);
+            this->listOfSpecialPlaces.remove(pair);
+            delete(pair);
             delete(point);
             return true;
         }
@@ -125,12 +156,12 @@ bool ModelMap::RemoveFromSpecialPlace(QPointF *p_point)
     return false;
 }
 
-std::list<QPointF*>* ModelMap::GetListOfCommonPlaces()
+std::list<std::pair<QString, QPointF*>*>* ModelMap::GetListOfCommonPlaces()
 {
     return &(this->listOfCommonPlaces);
 }
 
-std::list<QPointF*>* ModelMap::GetListOfSpecialPlaces()
+std::list<std::pair<QString, QPointF*>*>* ModelMap::GetListOfSpecialPlaces()
 {
     return &(this->listOfSpecialPlaces);
 }

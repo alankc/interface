@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Sistema de Controle Logísco Robótico</string>
   </property>
+  <property name="locale">
+   <locale language="Portuguese" country="Brazil"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
@@ -159,8 +162,10 @@
      <addaction name="actionEspecial"/>
     </widget>
     <addaction name="actionCarregar"/>
+    <addaction name="separator"/>
     <addaction name="menuAdicionar_Local"/>
     <addaction name="actionRemover_Local"/>
+    <addaction name="separator"/>
     <addaction name="actionSalvar_Locais"/>
     <addaction name="actionCarregar_Locais"/>
    </widget>

@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QTranslator>
+#include <QInputDialog>
 
 bool ControllerMainWindow::_isToAddSpecialPlace     = false;
 bool ControllerMainWindow::_isToAddCommonPlace      = false;
@@ -70,17 +71,19 @@ void ControllerMainWindow::LoadPlaces()
         {
             ClearPlaces();
 
-            foreach (QPointF *point_f, *(map->GetListOfCommonPlaces())) {
+            for (auto& item: *(map->GetListOfCommonPlaces()))
+            {
                 QPoint* point = new QPoint();
-                point->setX(point_f->toPoint().rx());
-                point->setY(point_f->toPoint().ry());
+                point->setX(item->second->toPoint().rx());
+                point->setY(item->second->toPoint().ry());
                 AddCommonPlace(point, false);
             }
 
-            foreach (QPointF *point_f, *(map->GetListOfSpecialPlaces())) {
+            for (auto& item: *(map->GetListOfSpecialPlaces()))
+            {
                 QPoint* point = new QPoint();
-                point->setX(point_f->toPoint().rx());
-                point->setY(point_f->toPoint().ry());
+                point->setX(item->second->toPoint().rx());
+                point->setY(item->second->toPoint().ry());
                 AddSpecialPlace(point, false);
             }
         }
@@ -114,10 +117,21 @@ void ControllerMainWindow::AddSpecialPlace(QPoint* p_point, bool p_AddToMapList)
 
         if(p_AddToMapList)
         {
+            bool ok;
+            QString text = QInputDialog::getText(view, QObject::tr("Nome de Local"), QObject::tr("Informe o nome do local:"), QLineEdit::Normal, "", &ok);
+
+            if (!ok || text.isEmpty())
+            {
+                delete(image);
+                delete(item);
+                _isToAddSpecialPlace = false;
+                return;
+            }
+
             p_point->setX(p_point->x() - image->size().width() / 2);
             p_point->setY(p_point->y() - image->size().height() / 2);
             QPointF *p = new QPointF(item->pos().rx(), item->pos().ry());
-            map->AddToSpecialPlace(p);
+            map->AddToSpecialPlace(text, p);
         }
 
         view->graphicsView->scene()->addItem(item);
@@ -136,10 +150,21 @@ void ControllerMainWindow::AddCommonPlace(QPoint* p_point, bool p_AddToMapList)
 
         if(p_AddToMapList)
         {
+            bool ok;
+            QString text = QInputDialog::getText(view, QObject::tr("Nome de Local"), QObject::tr("Informe o nome do local:"), QLineEdit::Normal, "", &ok);
+
+            if (!ok || text.isEmpty())
+            {
+                delete(image);
+                delete(item);
+                _isToAddCommonPlace = false;
+                return;
+            }
+
             p_point->setX(p_point->x() - image->size().width() / 2);
             p_point->setY(p_point->y() - image->size().height() / 2);
             QPointF *p = new QPointF(item->pos().rx(), item->pos().ry());
-            map->AddToCommonPlace(p);
+            map->AddToCommonPlace(text, p);
         }
 
         view->graphicsView->scene()->addItem(item);
