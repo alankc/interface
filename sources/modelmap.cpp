@@ -10,11 +10,6 @@ ModelMap::ModelMap()
 
 }
 
-ModelMap::ModelMap(QString p_path)
-{
-
-}
-
 bool ModelMap::LoadPlacesFromFile(QString p_path)
 {
     std::string path = p_path.toStdString();
@@ -23,11 +18,8 @@ bool ModelMap::LoadPlacesFromFile(QString p_path)
     if (!in.is_open())
         return false;
 
-    for (auto& item: this->listOfCommonPlaces)
-        this->listOfCommonPlaces.remove(item);
-
-    for (auto& item: this->listOfSpecialPlaces)
-        this->listOfSpecialPlaces.remove(item);
+    this->listOfCommonPlaces.clear();
+    this->listOfSpecialPlaces.clear();
 
     size_t sizeOfCommonList, sizeOfSpecialList;
     in.read((char*)&sizeOfCommonList, sizeof(sizeOfCommonList));
@@ -113,6 +105,7 @@ void ModelMap::AddToCommonPlace(QString p_name, QPointF *p_point)
     std::pair<QString, QPointF*> *pair = new std::pair<QString, QPointF*>();
     pair->first = p_name;
     pair->second = p_point;
+
     this->listOfCommonPlaces.push_back(pair);
 }
 bool ModelMap::RemoveFromCommonPlace(QPointF *p_point)
@@ -130,6 +123,28 @@ bool ModelMap::RemoveFromCommonPlace(QPointF *p_point)
         }
     }
     return false;
+}
+
+std::pair<QString, QPointF*>* ModelMap::CommonPlace(QString p_name)
+{
+    for(auto& pair: this->listOfCommonPlaces)
+    {
+        QString name = pair->first;
+        if (name.compare(p_name, Qt::CaseSensitive) == 0)
+            return pair;
+    }
+    return NULL;
+}
+
+std::pair<QString, QPointF*>* ModelMap::CommonPlace(QPointF *p_point)
+{
+    for(auto& pair: this->listOfCommonPlaces)
+    {
+        QPointF* point = pair->second;
+        if ((point->rx() == p_point->rx()) && (point->ry() == p_point->ry()))
+            return pair;
+    }
+    return NULL;
 }
 
 void ModelMap::AddToSpecialPlace(QString p_name, QPointF *p_point)
@@ -154,6 +169,30 @@ bool ModelMap::RemoveFromSpecialPlace(QPointF *p_point)
         }
     }
     return false;
+}
+
+std::pair<QString, QPointF*>* ModelMap::SpecialPlace(QString p_name)
+{
+    for(auto& pair: this->listOfSpecialPlaces)
+    {
+        QString name = pair->first;
+        if (name.compare(p_name, Qt::CaseSensitive) == 0)
+            return pair;
+    }
+    return NULL;
+}
+
+std::pair<QString, QPointF*>* ModelMap::SpecialPlace(QPointF *p_point)
+{
+    for(auto& pair: this->listOfSpecialPlaces)
+    {
+        QPointF* point = pair->second;
+        if ((point->rx() == p_point->rx()) && (point->ry() == p_point->ry()))
+        {
+            return pair;
+        }
+    }
+    return (std::pair<QString, QPointF*>*)0;
 }
 
 std::list<std::pair<QString, QPointF*>*>* ModelMap::GetListOfCommonPlaces()

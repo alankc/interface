@@ -43,7 +43,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayoutListaLocais">
      <item>
-      <widget class="QListView" name="listView"/>
+      <widget class="QListWidget" name="listWidgetPlaces"/>
      </item>
     </layout>
    </widget>

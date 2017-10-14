@@ -17,7 +17,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButtonEnviar_clicked()
 {
     QMessageBox a;
-    a.setText("Enviado ao Robô!");
+    a.setText("Enviado ao Sistema!");
     a.exec();
 }
 /*Maps*/
@@ -61,4 +61,10 @@ void MainWindow::on_actionRemover_Local_triggered()
 void MainWindow::on_actionCarregar_Locais_triggered()
 {
     ControllerMainWindow::LoadPlaces();
+}
+
+void MainWindow::on_listWidgetPlaces_clicked(const QModelIndex &index)
+{
+    if (ControllerMainWindow::IsToRemovePlace())
+        ControllerMainWindow::RemovePlace(index.row());
 }
