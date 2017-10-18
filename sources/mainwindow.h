@@ -27,7 +27,8 @@ private slots:
     void on_actionEspecial_triggered();
     void on_actionRemover_Local_triggered();
     void on_actionCarregar_Locais_triggered();
-    void on_listWidgetPlaces_clicked(const QModelIndex &index);
+    void on_listWidgetPlaces_doubleClicked(const QModelIndex &index);
+    void on_listWidgetTarefas_doubleClicked(const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H

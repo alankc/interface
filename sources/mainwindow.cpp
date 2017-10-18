@@ -1,12 +1,24 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <QDesktopWidget>
 #include <controllermainwindow.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     setupUi(this);
+
+    QDesktopWidget* d = QApplication::desktop();
+    QSize size = this->size();
+
+    int ws = d->width();   // returns screen width
+    int h = d->height();  // returns screen height
+    int mw = size.width();
+    int mh = size.height();
+    int cw = (ws/2) - (mw/2);
+    int ch = (h/2) - (mh/2);
+    this->move(cw,ch);
 }
 
 MainWindow::~MainWindow()
@@ -29,12 +41,12 @@ void MainWindow::on_actionCarregar_triggered()
 /*Tasks*/
 void MainWindow::on_actionAdicionar_triggered()
 {
-    QMessageBox::information(this, "teste", "Adicionar Tarefa");
+    ControllerMainWindow::SetToAddTask();
 }
 
 void MainWindow::on_actionRemover_triggered()
 {
-    QMessageBox::information(this, "teste", "RemoverTarefa");
+    ControllerMainWindow::SetToRemoveTask();
 }
 
 /*Places*/
@@ -63,8 +75,16 @@ void MainWindow::on_actionCarregar_Locais_triggered()
     ControllerMainWindow::LoadPlaces();
 }
 
-void MainWindow::on_listWidgetPlaces_clicked(const QModelIndex &index)
+void MainWindow::on_listWidgetPlaces_doubleClicked(const QModelIndex &index)
 {
     if (ControllerMainWindow::IsToRemovePlace())
         ControllerMainWindow::RemovePlace(index.row());
+    else if (ControllerMainWindow::IsToAddTask())
+        ControllerMainWindow::AddTask(index.row());
+}
+
+void MainWindow::on_listWidgetTarefas_doubleClicked(const QModelIndex &index)
+{
+    if (ControllerMainWindow::IsToRemoveTask())
+        ControllerMainWindow::RemoveTask(index.row());
 }

@@ -15,21 +15,22 @@ bool ControllerMainWindow::_isToAddSpecialPlace     = false;
 bool ControllerMainWindow::_isToAddCommonPlace      = false;
 bool ControllerMainWindow::_isToRemovePlace         = false;
 
-bool ControllerMainWindow::isToAddTask      = false;
-bool ControllerMainWindow::isToRemoveTask   = false;
+bool ControllerMainWindow::_isToAddTask      = false;
+bool ControllerMainWindow::_isToRemoveTask   = false;
 
-MainWindow* ControllerMainWindow::view = 0;
-ModelMap* ControllerMainWindow::map = 0;
+MainWindow* ControllerMainWindow::view = NULL;
+ModelMap* ControllerMainWindow::map = NULL;
 
 
 void ControllerMainWindow::LoadMap()
 {
-    if (map == 0)
+    if (map == NULL)
     {
         map = new ModelMap();
     }
     else
     {
+        ClearPlaces();
         delete(map);
         map = new ModelMap();
     }
@@ -55,7 +56,7 @@ void ControllerMainWindow::LoadMap()
 
 void ControllerMainWindow::LoadPlaces()
 {
-    if(map == 0)
+    if(map == NULL)
     {
         QMessageBox::critical(view, "Erro", "Nenhum mapa carregado!");
         return;
@@ -113,7 +114,8 @@ void ControllerMainWindow::SaveMap()
 
 void ControllerMainWindow::AddSpecialPlace(QPoint* p_point, bool p_AddToMapList)
 {
-    if(map != 0)
+    _isToAddSpecialPlace = false;
+    if(map != NULL)
     {
         QImage *image = new QImage(":/redFlag.png");
         QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(*image));
@@ -127,7 +129,6 @@ void ControllerMainWindow::AddSpecialPlace(QPoint* p_point, bool p_AddToMapList)
             {
                 delete(image);
                 delete(item);
-                _isToAddSpecialPlace = false;
                 return;
             }
 
@@ -140,7 +141,10 @@ void ControllerMainWindow::AddSpecialPlace(QPoint* p_point, bool p_AddToMapList)
         item->setPos(*p_point);
         view->graphicsView->scene()->addItem(item);
     }
-    _isToAddSpecialPlace = false;
+    else
+    {
+        QMessageBox::critical(view, "Erro", "Nenhum mapa carregado!");
+    }
 }
 
 void ControllerMainWindow::AddSpecialPlace(QString p_name)
@@ -149,13 +153,14 @@ void ControllerMainWindow::AddSpecialPlace(QString p_name)
     QListWidgetItem *newItem = new QListWidgetItem();
     newItem->setText(p_name);
     newItem->setIcon(*icon);
-    int row = view->listWidgetPlaces->row(view->listWidgetPlaces->currentItem());
+    int row = view->listWidgetPlaces->currentRow();
     view->listWidgetPlaces->insertItem(row, newItem);
 }
 
 void ControllerMainWindow::AddCommonPlace(QPoint* p_point, bool p_AddToMapList)
 {
-    if(map != 0)
+    _isToAddCommonPlace = false;
+    if(map != NULL)
     {
         QImage *image = new QImage(":/greenFlag.png");
         QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(*image));
@@ -169,7 +174,6 @@ void ControllerMainWindow::AddCommonPlace(QPoint* p_point, bool p_AddToMapList)
             {
                 delete(image);
                 delete(item);
-                _isToAddCommonPlace = false;
                 return;
             }
 
@@ -183,7 +187,10 @@ void ControllerMainWindow::AddCommonPlace(QPoint* p_point, bool p_AddToMapList)
         item->setPos(*p_point);
         view->graphicsView->scene()->addItem(item);
     }
-    _isToAddCommonPlace = false;
+    else
+    {
+        QMessageBox::critical(view, "Erro", "Nenhum mapa carregado!");
+    }
 }
 
 void ControllerMainWindow::AddCommonPlace(QString p_name)
@@ -192,7 +199,7 @@ void ControllerMainWindow::AddCommonPlace(QString p_name)
     QListWidgetItem *newItem = new QListWidgetItem();
     newItem->setText(p_name);
     newItem->setIcon(*icon);
-    int row = view->listWidgetPlaces->row(view->listWidgetPlaces->currentItem());
+    int row = view->listWidgetPlaces->currentRow();
     view->listWidgetPlaces->insertItem(row, newItem);
 }
 
@@ -307,5 +314,26 @@ void ControllerMainWindow::RemovePlace(int index)
 
         view->graphicsView->scene()->removeItem(GraphicsItem);
         delete(GraphicsItem);
+    }
+}
+
+void ControllerMainWindow::AddTask(int index)
+{
+    _isToAddTask = false;
+    if (index >= 0)
+    {
+        auto item = view->listWidgetPlaces->item(index);
+        auto newItem = item->clone();
+        int row = view->listWidgetTarefas->currentRow();
+        view->listWidgetTarefas->insertItem(row, newItem);
+    }
+}
+
+void ControllerMainWindow::RemoveTask(int index)
+{
+    _isToRemoveTask = false;
+    if (index >= 0)
+    {
+        delete (view->listWidgetTarefas->takeItem(index));
     }
 }

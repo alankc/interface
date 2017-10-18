@@ -96,7 +96,6 @@ bool ModelMap::SavePlacesToFile(QString p_path)
     }
 
     out.close();
-
     return true;
 }
 

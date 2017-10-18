@@ -17,6 +17,9 @@
    <locale language="Portuguese" country="Brazil"/>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="locale">
+    <locale language="English" country="UnitedStates"/>
+   </property>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
@@ -83,7 +86,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayoutListaTarefas">
      <item>
-      <widget class="QListView" name="listView_2"/>
+      <widget class="QListWidget" name="listWidgetTarefas"/>
      </item>
     </layout>
    </widget>
@@ -130,8 +133,8 @@
      <string>  Enviar ao Robô</string>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>Images/mail-outgoing.png</normaloff>Images/mail-outgoing.png</iconset>
+     <iconset resource="Images/images.qrc">
+      <normaloff>:/mail-outgoing.png</normaloff>:/mail-outgoing.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -222,6 +225,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="Images/images.qrc"/>
+ </resources>
  <connections/>
 </ui>
